@@ -5,7 +5,17 @@
           "kategorie": "Hauptgericht",
           "preis": 6.99,
           "url": "burger",
-          "bild": "/images/products/burger.jpg"
+          "bild": "/images/products/burger.jpg",
+          "extras": [
+            {
+              "text": "doppelt",
+              "preis": 4
+            },
+            {
+              "text": "extra scharf",
+              "preis": 0.50
+            }
+          ]
         },
          {
           "name": "Coca Cola",
@@ -13,7 +23,13 @@
           "kategorie": "Trinken",
           "preis": 1.99,
           "url": "cola",
-          "bild": "/images/products/cola.jpg"
+          "bild": "/images/products/cola.jpg",
+          "extras": [
+            {
+              "text": "gekühlt",
+              "preis": 0.20
+            }
+          ]
         },   
         {
           "name": "Erdbeer Eis",
@@ -21,7 +37,13 @@
           "kategorie": "Nachspeise",
           "preis": 2.99,
           "url": "erdbeereis",
-          "bild": "/images/products/eis.jpg"
+          "bild": "/images/products/eis.jpg",
+          "extras": [
+            {
+              "text":"extra Sahne",
+              "preis": 1
+            }
+          ]
         },
          {
           "name": "Falaffel",
@@ -29,7 +51,17 @@
           "kategorie": "Hauptgericht",
           "preis": 6.99,
           "url": "falaffel",
-          "bild": "/images/products/falaffel.jpg"
+          "bild": "/images/products/falaffel.jpg",
+          "extras": [
+            {
+              "text":"Sesam sauce",
+              "preis": 1
+            },
+            {
+              "text":"Coctail sauce",
+              "preis": 1
+            }
+          ]
         },
          {
           "name": "Lahmacun",
@@ -37,7 +69,13 @@
           "kategorie": "Hauptgericht",
           "preis": 4.50,
           "url": "lahmacun",
-          "bild": "/images/products/lahmacun.jpg"
+          "bild": "/images/products/lahmacun.jpg",
+          "extras": [
+            {
+              "text":"Scharf",
+              "preis": 0.50
+            }
+          ]
         },
          {
           "name": "Lasagne",
@@ -45,7 +83,17 @@
           "kategorie": "Hauptgericht",
           "preis": 8.50,
           "url": "lasagne",
-          "bild": "/images/products/lasagne.jpg"
+          "bild": "/images/products/lasagne.jpg",
+          "extras": [
+            {
+              "text":"doppelt",
+              "preis": 5
+            },
+            {
+              "text": "extra Kaese",
+              "preis": 2
+            }
+          ]
         },  
          {
           "name": "Schokoladen Muffin",
@@ -61,7 +109,17 @@
           "kategorie": "Hauptgericht",
           "preis": 7.50,
           "url": "pizza",
-          "bild": "/images/products/pizza.jpg"
+          "bild": "/images/products/pizza.jpg",
+          "extras": [
+            {
+              "text":"extra Kaese",
+              "preis": 2.5
+            },
+            {
+              "text": "groß",
+              "preis": 3
+            }
+          ]
         }, 
          {
           "name": "Suesskartoffel Pommes",

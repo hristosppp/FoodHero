@@ -11,7 +11,7 @@ export default function Navbar() {
             <Link href="/">
                 <Image src={"/images/imagesFastFood.png"} alt="logo" width={140} height={75} />
             </Link>
-            <Link href="/orders">
+            <Link href="/cart">
                 <Image src={"/images/warenkorb.png"} alt="logo" width={60} height={50} />
                 <Badge pill bg="success">2</Badge>
             </Link>

@@ -1,15 +1,29 @@
-import { useRouter } from "next/router";
-import data from "../../jsondb/products.json"
 import Link from "next/link";
 import Image from "next/image";
 import { ListGroup, Button, ListGroupItem } from "react-bootstrap";
+import mongodb from "@/utils/mongodb";
+import Product from "@/models/Product";
+import { useState } from "react";
 
 
-export default function Productpage(){
-    const router = useRouter();
-    const {url} = router.query;
-    const product = data.find((product) => product.url === url);
+export default function Productpage({product}){
+    const [preis, setPreis] = useState(product.preis);
+    const [extras, setExtras] = useState([]);
+    const [menge, setMenge] = useState(1);
 
+    const addExtra = (e, extra) => {
+        const checked = e.target.checked;
+
+        if(checked){
+            setPreis((prevPreis) => prevPreis + extra.preis);
+            setExtras([...extras, extra]);
+        }else{
+            setPreis((prevPreis) => prevPreis - extra.preis);
+            setExtras(extras.filter((alleExtras) => alleExtras._id !== extra._id));
+        }
+    }
+
+    
     if(!product){
         return (
             <div>
@@ -37,19 +51,28 @@ export default function Productpage(){
                     <ListGroup variant="flush">
                         <ListGroupItem>
                             <h2 className="text-danger">
-                                {product.preis} €
+                                {preis.toFixed(2)} €
                             </h2>
                         </ListGroupItem>
                         <ListGroupItem>
                             {product.beschreibung}
                         </ListGroupItem>
                         <ListGroupItem>
-                            Extras:
-                            doppelt <input className="form-check-input me-2" type="checkbox" />
-                            extra Pommes <input className="form-check-input me-2" type="checkbox" />
+                            {product.extras.length ? "Extras: " : <p></p>}
+                            {product.extras.map( extra => {
+                                return(
+                                    <span key={extra.name}>
+                                        {extra.text}<input 
+                                        className="form-check-input me-2" 
+                                        type="checkbox" 
+                                        id={extra.text}
+                                        onChange={(e) => {addExtra(e, extra)}} />
+                                    </span>
+                                )
+                            })}
                         </ListGroupItem>
                         <ListGroupItem>
-                            <input className="form-control w-50" type="number" placeholder="1" min="1"></input>
+                            <input className="form-control w-50" type="number" value={menge} min="1" max="100" onChange={(e)=> setMenge(e.target.value)}></input>
                         </ListGroupItem>
                         <ListGroupItem>
                             <div className="row shadow">
@@ -61,4 +84,15 @@ export default function Productpage(){
             </div>
         </div>
     )
+}
+
+export async function getServerSideProps(context) {
+    const url = context.params.url
+    await mongodb.dbConnect();
+    const product = await Product.findOne({url}).lean();
+    return {
+        props: {
+            product: JSON.parse(JSON.stringify(product))
+        }
+    }
 }

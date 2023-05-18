@@ -1,13 +1,12 @@
 import Link from "next/link";
-import data from "../jsondb/products.json";
 import { Card, Button } from "react-bootstrap";
 
 
-export default function Productlist() {
+export default function Productlist({products}) {
     return(
         <div>
             <div className="row row-cols-3">
-                {data.map((product) => {
+                {products?.map((product) => {
                     return(
                         <div key={product.name} className="mt-3 col">
                             <Card>
