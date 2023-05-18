@@ -1,10 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 
 
 export default function Navbar() {
+  const cAmount = useSelector( (state) => state.cart.cAmount);
+
     return (
       <div className="shadow sticky-top p-2 mb-2 bg-danger">
         <div className="d-flex justify-content-between aling-items-center">
@@ -13,7 +16,7 @@ export default function Navbar() {
             </Link>
             <Link href="/cart">
                 <Image src={"/images/warenkorb.png"} alt="logo" width={60} height={50} />
-                <Badge pill bg="success">2</Badge>
+                <Badge pill bg="success">{cAmount}</Badge>
             </Link>
         </div>
       </div>

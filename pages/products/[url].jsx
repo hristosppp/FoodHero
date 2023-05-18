@@ -4,12 +4,15 @@ import { ListGroup, Button, ListGroupItem } from "react-bootstrap";
 import mongodb from "@/utils/mongodb";
 import Product from "@/models/Product";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addProducts } from "@/redux/cartSlice";
 
 
 export default function Productpage({product}){
     const [preis, setPreis] = useState(product.preis);
     const [extras, setExtras] = useState([]);
     const [menge, setMenge] = useState(1);
+    const dispatch = useDispatch();
 
     const addExtra = (e, extra) => {
         const checked = e.target.checked;
@@ -21,6 +24,10 @@ export default function Productpage({product}){
             setPreis((prevPreis) => prevPreis - extra.preis);
             setExtras(extras.filter((alleExtras) => alleExtras._id !== extra._id));
         }
+    }
+
+    const toCart = () => {
+        dispatch(addProducts({...product, extras, preis, menge}))
     }
 
     
@@ -76,7 +83,7 @@ export default function Productpage({product}){
                         </ListGroupItem>
                         <ListGroupItem>
                             <div className="row shadow">
-                                <Button variant="danger">add to Card</Button>
+                                <Button variant="danger" onClick={toCart}>add to Card</Button>
                             </div>
                         </ListGroupItem>
                     </ListGroup>
