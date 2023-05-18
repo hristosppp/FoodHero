@@ -6,13 +6,15 @@ import Product from "@/models/Product";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addProducts } from "@/redux/cartSlice";
-
+import { v4 as uuidv4} from "uuid";
+import { useRouter } from "next/router";
 
 export default function Productpage({product}){
     const [preis, setPreis] = useState(product.preis);
     const [extras, setExtras] = useState([]);
     const [menge, setMenge] = useState(1);
     const dispatch = useDispatch();
+    const router = useRouter();
 
     const addExtra = (e, extra) => {
         const checked = e.target.checked;
@@ -27,7 +29,9 @@ export default function Productpage({product}){
     }
 
     const toCart = () => {
-        dispatch(addProducts({...product, extras, preis, menge}))
+        const _id = uuidv4();
+        dispatch(addProducts({...product, extras, preis, menge, _id}));
+        router.push("/cart");
     }
 
     
