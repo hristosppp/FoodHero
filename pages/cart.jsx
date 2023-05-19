@@ -2,15 +2,19 @@ import { Table,CloseButton, Button, Card } from "react-bootstrap";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
-import { removeProduct } from "@/redux/cartSlice";
+import { removeProduct, leeren } from "@/redux/cartSlice";
 import { useEffect, useState } from "react";
 import { PayPalScriptProvider, PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import axios from "axios";
+import { useRouter } from "next/router";
+
 
 export default function Cart(){
     const dispatch = useDispatch();
     const cart = useSelector((state) => state.cart);
     const clientID = "AeDAOELMF2BRbMxl2g7qqAgMy2ZfVg3IE-T920N7oEN_oWzfkr_5NV1FxNIAViXnvUAmBiSSTTucz9xP";
-    const [kasse, setKasse] = useState(false)
+    const [kasse, setKasse] = useState(false);
+    const router = useRouter()
 
     const remove = (product) => {
         dispatch(removeProduct(product))
@@ -18,22 +22,39 @@ export default function Cart(){
 
     const amount = cart.totalSum;
     const currency = "EUR";
-    const style = { "layout": "vertical" };
+    const style = { 
+        "layout": "vertical",
+        "height": 30
+    };
+
+    const createOrder = async (data) => {
+        try {
+            const res = await axios.post("http://localhost:3000/api/orders", data);
+
+            if(res.status === 201){
+                dispatch(leeren());
+                router.push(`/orders/${res.data._id}`);
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const ButtonWrapper = ({currency, showSpinner }) => {
         // usePayPalScriptReducer can be use only inside children of PayPalScriptProviders
         // This is the main reason to wrap the PayPalButtons in a new component
         const [{ options, isPending }, dispatch] = usePayPalScriptReducer();
 
-        useEffect(() => {
-            dispatch({
-                type: "resetOptions",
-                value: {
-                    ...options, 
-                    currency: currency,
-                },
-            });
-        }, [currency, showSpinner]);
+    useEffect(() => {
+      dispatch({
+        type: "resetOptions",
+        value: {
+          ...options,
+          currency: currency,
+        },
+      });
+    }, [currency, showSpinner]);
 
         return(
         <>
@@ -62,8 +83,15 @@ export default function Cart(){
                 }}
                 onApprove={function (data, actions) {
                     return actions.order.capture().then(function (details) {
-                        console.log(details);
-                        console.log(details.purchase_units[0].shipping);
+                        
+                        const client = details.purchase_units[0].shipping;
+                        createOrder({
+                            kunde: client.name.full_name,
+                            adresse: client.address.address_line_1 + ", " + client.address.admin_area_1,
+                            betrag: cart.totalSum,
+                            status: 0,
+                            zahlung: 1
+                        });
                     });
                 }}
             />
@@ -112,7 +140,7 @@ export default function Cart(){
                                 })}
                                 </td>
                                 <td>{product.menge}</td>
-                                <td>{(product.preis*product.menge).toFixed(2)}</td>
+                                <td>{(product.preis*product.menge).toFixed(2)} €</td>
                                 <td><Button className="btn-sm" onClick={() => remove(product)}>x</Button></td>
                             </tr>
                                 )
@@ -126,7 +154,7 @@ export default function Cart(){
                             <Card.Header as="h5">Total</Card.Header>
                             <Card.Body className="text-center">
                                 <Card.Title>
-                                    {cart.totalSum.toFixed(2)}
+                                    {cart.totalSum.toFixed(2)} €
                                 </Card.Title>
                                 
                                 { kasse ? 

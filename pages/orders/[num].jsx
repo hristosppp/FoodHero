@@ -1,9 +1,37 @@
 import { Table,CloseButton, Button, Card, Spinner } from "react-bootstrap";
 import { useRouter } from "next/router";
+import axios from "axios";
 
-export default function Orders(){
+export default function Orders({order}){
     const router = useRouter();
     const {num} = router.query;
+
+    let status;
+    switch (order.status){
+        case 0:
+            status = "Eingegangen";
+            break;
+        case 1:
+            status = "Zubereitung";
+            break;
+        case 2:
+            status = "Unterwegs";
+            break;
+        case 3:
+            status = "Ausgeliefert";
+            break;
+    }
+
+    if(num !== order._id){
+        return(
+            <div>
+                <h2>Ordernumber {num} not found</h2>
+                <Button variant="primary" onClick={()=> router.push("/")}>to Menu</Button>
+            </div>
+        )
+    }else{
+
+    
     return(
         <div>
             <h1>Order status</h1>
@@ -21,11 +49,16 @@ export default function Orders(){
                         <tbody>
                             <tr>
                                 <td>{num}</td>
-                                <td>doppelt</td>
-                                <td>1</td>
+                                <td>{order.kunde}</td>
+                                <td>{order.adresse}</td>
                                 <td>
-                                    <span>in process </span>
-                                    <Spinner animation="border" variant="success" size="sm" />
+                                    <span>{status} </span>
+                                    {order.status < 3 ? 
+                                        ( <Spinner animation="border" variant="success" size="sm" /> )
+                                        : 
+                                        ( <span>√</span>)
+                                    }
+                                    
                                 </td>
                             </tr>
                         </tbody>
@@ -37,9 +70,14 @@ export default function Orders(){
                             <Card.Header as="h5">Total</Card.Header>
                             <Card.Body className="text-center">
                                 <Card.Title>
-                                    6.95€
+                                    {order.betrag.toFixed(2)} €
                                 </Card.Title>
-                                <Button variant="success disabled">payed</Button>
+                                {order.zahlung === 0 ?
+                                (<Button variant="danger disabled">offen</Button>)
+                                :
+                                (<Button variant="success disabled">bezahlt</Button>)
+                                }
+                                
                             </Card.Body>
                         </Card>
                     </div>
@@ -47,4 +85,13 @@ export default function Orders(){
             </div>
         </div>
     )
+}
+}
+
+export async function getServerSideProps({params}){
+    const res = await axios.get(`http://localhost:3000/api/orders/${params.num}`);
+
+    return{
+        props: {order: res.data},
+    }
 }
