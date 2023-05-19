@@ -22,6 +22,27 @@ const OrderSchema = new mongoose.Schema({
     zahlung: {
         type: Number,
         required: true
+    },
+    produkte: {
+        type:[
+            {
+                name:{
+                    type: String,
+                    required:true,
+                },
+                menge:{
+                    type: Number,
+                    required: true,
+                },
+                extras:{
+                    type:[
+                        {
+                            type: String,
+                        }
+                    ]
+                }
+            }
+        ]
     }
 },
 {

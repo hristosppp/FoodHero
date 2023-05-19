@@ -20,7 +20,7 @@ export default function Cart(){
         dispatch(removeProduct(product))
     }
 
-    const amount = cart.totalSum;
+    const amount = cart.totalSum.toFixed(2);
     const currency = "EUR";
     const style = { 
         "layout": "vertical",
@@ -90,7 +90,13 @@ export default function Cart(){
                             adresse: client.address.address_line_1 + ", " + client.address.admin_area_2,
                             betrag: cart.totalSum,
                             status: 0,
-                            zahlung: 1
+                            zahlung: 1,
+                            produkte: cart.produkte.map((produkt) => (
+                            {
+                                name: produkt.name,
+                                menge: produkt.menge, 
+                                extras: produkt.extras.map(extra => (extra.text))
+                            }))
                         });
                     });
                 }}

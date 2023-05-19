@@ -63,6 +63,29 @@ export default function Orders({order}){
                             </tr>
                         </tbody>
                     </Table>
+                    <Table hover responsive>
+                        <thead>
+                            <tr>
+                                <th>Product name</th>
+                                <th>Extras</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {order.produkte.map((product) => (
+                                <tr key={product._id}>
+                                <td>{product.name}</td>
+                                <td>
+                                {product.extras.map((extra) =>(
+                                    <span key={extra._id}>{extra}</span>
+                                ))}
+                                </td>
+                                <td>{product.menge}</td>
+                            </tr>
+                            ))}
+
+                        </tbody>
+                    </Table>
                 </div>
                 <div className="col-3 p-2">
                     <div className="shadow">
