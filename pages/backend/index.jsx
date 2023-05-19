@@ -1,12 +1,32 @@
-import { Table,CloseButton, Button, Card, Spinner } from "react-bootstrap";
+import { Table, Button, CloseButton } from "react-bootstrap";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { useState } from "react";
+import Link from "next/link";
 
 export default function Orders({orders}){
     const router = useRouter();
     const status = ["Eingegangen", "Zubereitung", "Unterwegs", "Ausgeliefert"];
 
-
+    const statusUpdate = async (id, curStatus) => {
+        try {
+            if(curStatus <= 2){
+                await axios.put(`http://localhost:3000/api/orders/${id}`, {status: curStatus + 1});
+                router.reload();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const removeOrder = async (id) => {
+        try {
+            
+                await axios.delete(`http://localhost:3000/api/orders/${id}`);
+                router.reload();
+        } catch (error) {
+            console.log(error);
+        }
+    }
     
     return(
         <div>
@@ -20,20 +40,29 @@ export default function Orders({orders}){
                                 <th>Name</th>
                                 <th>Adress</th>
                                 <th>Satus</th>
+                                <th><CloseButton disabled/></th>
                             </tr>
                         </thead>
                         {orders.map((order) => {
-                            <tbody key={order._id}>
+                            return (
+                                <tbody key={order._id}>
                             <tr>
-                                <td>{order._id}</td>
+                                <td>
+                                <Link className="text-danger" href={`/orders/${order._id}`}>
+                                {order._id}
+                                </Link>
+                                </td>
                                 <td>{order.kunde}</td>
                                 <td>{order.adresse}</td>
                                 <td>
-                                    <span>{status[order.status]} </span>
-                
+                                    <Button onClick={() => statusUpdate(order._id, order.status)}>{status[order.status]}</Button>
+                                </td>
+                                <td>
+                                    <Button variant="danger" onClick={() => removeOrder(order._id)}>X</Button>
                                 </td>
                             </tr>
                         </tbody>
+                            )
                         })}
 
                     </Table>
@@ -45,8 +74,7 @@ export default function Orders({orders}){
 
 
 export async function getServerSideProps(){
-    const res = await axios.get(`http://localhost:3000/api/orders}`);
-
+    const res = await axios.get(`http://localhost:3000/api/orders`);
     return{
         props: {orders: res.data},
     }

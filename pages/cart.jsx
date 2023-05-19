@@ -87,7 +87,7 @@ export default function Cart(){
                         const client = details.purchase_units[0].shipping;
                         createOrder({
                             kunde: client.name.full_name,
-                            adresse: client.address.address_line_1 + ", " + client.address.admin_area_1,
+                            adresse: client.address.address_line_1 + ", " + client.address.admin_area_2,
                             betrag: cart.totalSum,
                             status: 0,
                             zahlung: 1

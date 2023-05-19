@@ -14,14 +14,23 @@ export default async function handler(req, res) {
             res.status(200).json(error)
         }
     }
-    /*
+    
     if(method === "PUT"){
         try{
-            const order = await Orders.create(req.body);
+            const order = await Orders.findByIdAndUpdate(num, req.body, {new:true});
+            res.status(200).json(order);
+        }catch(error){
+            res.status(500).json(error);
+        }
+    } 
+
+    if(method === "DELETE"){
+        try{
+            const order = await Orders.findByIdAndDelete(num);
             res.status(200).json(order);
         }catch(error){
             res.status(500).json(error);
         }
     }
-    */
+   
 }
