@@ -1,9 +1,9 @@
-import mongodb from "@/utils/mongodb";
-import Orders from "@/models/Orders";
+import mongodb from "../../../utils/mongodb";
+import Orders from "../../../models/Orders";
 
 export default async function handler(req, res) {
     const {method} = req;
-
+console.log("im here");
     await mongodb.dbConnect();
 
     if(method === "GET"){
@@ -17,6 +17,7 @@ export default async function handler(req, res) {
     if(method === "POST"){
         try{
             const order = await Orders.create(req.body);
+            console.log("created")
             res.status(200).json(order);
         }catch(error){
             res.status(500).json(error);

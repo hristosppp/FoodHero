@@ -48,5 +48,5 @@ const OrderSchema = new mongoose.Schema({
 {
     timestamps: true
 })
-
+//delete mongoose.connection.model["Orders"]
 export default mongoose.models.Orders || mongoose.model("Orders", OrderSchema)

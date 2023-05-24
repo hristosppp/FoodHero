@@ -73,7 +73,16 @@ export default function Orders({orders}){
 }
 
 
-export async function getServerSideProps(){
+export async function getServerSideProps(ctx){
+    const myCookie = ctx.req?.cookies || "";
+    if(myCookie.token !== process.env.TOKEN){
+        return{
+            redirect:{
+                destination: "/backend/login",
+                permant: false
+            }
+        }
+    }
     const res = await axios.get(`http://localhost:3000/api/orders`);
     return{
         props: {orders: res.data},
