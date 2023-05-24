@@ -8,6 +8,7 @@ import { PayPalScriptProvider, PayPalButtons, usePayPalScriptReducer } from "@pa
 import axios from "axios";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
 
 export default function Cart(){
@@ -112,7 +113,11 @@ export default function Cart(){
 
     return(
         
-        <div>
+        <motion.div
+            initial={{ y:-300 }}
+            animate={{ y:0}}
+            transition={{type: "spring", stiffness: 120}}
+        >
             {cart.cAmount === 0 ? (
                 <h2>The Cart is empty</h2>
             ) :
@@ -194,6 +199,6 @@ export default function Cart(){
             </div>
             </div>
             )}
-        </div>
+        </motion.div>
     )
 }
