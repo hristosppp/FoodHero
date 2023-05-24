@@ -2,7 +2,7 @@ import { Table,CloseButton, Button, Card } from "react-bootstrap";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
-import { removeProduct, leeren } from "@/redux/cartSlice";
+import { removeProduct, leeren } from "../redux/cartSlice";
 import { useEffect, useState } from "react";
 import { PayPalScriptProvider, PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import axios from "axios";
@@ -16,7 +16,7 @@ export default function Cart(){
     const cart = useSelector((state) => state.cart);
     const clientID = "AeDAOELMF2BRbMxl2g7qqAgMy2ZfVg3IE-T920N7oEN_oWzfkr_5NV1FxNIAViXnvUAmBiSSTTucz9xP";
     const [kasse, setKasse] = useState(false);
-    const router = useRouter()
+    const router = useRouter();
 
     const remove = (product) => {
         dispatch(removeProduct(product))
@@ -89,15 +89,15 @@ export default function Cart(){
                 }}
                 onApprove={function (data, actions) {
                     return actions.order.capture().then(function (details) {
-                        
                         const client = details.purchase_units[0].shipping;
+                        
                         createOrder({
                             kunde: client.name.full_name,
                             adresse: client.address.address_line_1 + ", " + client.address.admin_area_2,
                             betrag: cart.totalSum,
                             status: 0,
                             zahlung: 1,
-                            produkte: cart.produkte.map((produkt) => (
+                            produkte: cart.products.map((produkt) => (
                             {
                                 name: produkt.name,
                                 menge: produkt.menge, 

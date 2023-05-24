@@ -3,7 +3,7 @@ import Orders from "../../../models/Orders";
 
 export default async function handler(req, res) {
     const {method} = req;
-console.log("im here");
+
     await mongodb.dbConnect();
 
     if(method === "GET"){
@@ -17,8 +17,7 @@ console.log("im here");
     if(method === "POST"){
         try{
             const order = await Orders.create(req.body);
-            console.log("created")
-            res.status(200).json(order);
+            res.status(201).json(order);
         }catch(error){
             res.status(500).json(error);
         }
