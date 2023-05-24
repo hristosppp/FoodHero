@@ -11,7 +11,7 @@ export default function Login(){
 
     const login = async () => {
         try {
-            await axios.post("http://localhost:3000/api/login", {
+            await axios.post("../api/login", {
                 user,password
             })
             router.push("/backend")

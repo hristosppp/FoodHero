@@ -11,7 +11,7 @@ export default function Orders({orders}){
     const statusUpdate = async (id, curStatus) => {
         try {
             if(curStatus <= 2){
-                await axios.put(`http://localhost:3000/api/orders/${id}`, {status: curStatus + 1});
+                await axios.put(`../api/orders/${id}`, {status: curStatus + 1});
                 router.reload();
             }
         } catch (error) {
@@ -21,7 +21,7 @@ export default function Orders({orders}){
     const removeOrder = async (id) => {
         try {
             
-                await axios.delete(`http://localhost:3000/api/orders/${id}`);
+                await axios.delete(`../api/orders/${id}`);
                 router.reload();
         } catch (error) {
             console.log(error);
@@ -83,7 +83,7 @@ export async function getServerSideProps(ctx){
             }
         }
     }
-    const res = await axios.get(`http://localhost:3000/api/orders`);
+    const res = await axios.get(`${process.env.SERVER_URL}api/orders`);
     return{
         props: {orders: res.data},
     }

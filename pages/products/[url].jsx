@@ -1,8 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ListGroup, Button, ListGroupItem } from "react-bootstrap";
-import mongodb from "@/utils/mongodb";
-import Product from "@/models/Product";
+import mongodb from "../../utils/mongodb";
+import Product from "../../models/Product";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addProducts } from "@/redux/cartSlice";
@@ -32,7 +32,7 @@ export default function Productpage({product}){
     const toCart = () => {
         const _id = uuidv4();
         dispatch(addProducts({...product, extras, preis, menge, _id}));
-        router.push("/cart");
+        router.push("/");
     }
 
     
