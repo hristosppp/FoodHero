@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { PayPalScriptProvider, PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 
 export default function Cart(){
@@ -18,6 +19,10 @@ export default function Cart(){
 
     const remove = (product) => {
         dispatch(removeProduct(product))
+        toast.error(product.name + " is removed", {
+            position:"top-center",
+            autoClose: 3000
+        })
     }
 
     const amount = cart.totalSum.toFixed(2);
